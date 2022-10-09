@@ -7,16 +7,14 @@ Notify.init({
   timeout: 2000,
 });
 
-const formRef = document.querySelector('.form');
+const form = document.querySelector('form');
+form.addEventListener('submit', onSubmit);
+form.addEventListener('input', getFormValues);
 
-formRef.addEventListener('submit', onFormSubmit);
-formRef.addEventListener('input', getFormValues);
-
-function onFormSubmit(event) {
-  event.preventDefault();
+function onSubmit(e) {
+  e.preventDefault();
 
   let { delay, amount, step } = getFormValues();
-
   setTimeout(() => {
     for (let i = 1; i <= amount; i += 1) {
       createPromise(i, delay).then(onFulfilled).catch(onRejected);
@@ -27,7 +25,13 @@ function onFormSubmit(event) {
 
   resetFormValues();
 }
-
+function getFormValues() {
+  return {
+    delay: Number(form.delay.value),
+    step: Number(form.step.value),
+    amount: Number(form.amount.value),
+  };
+}
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.5;
   return new Promise((resolve, reject) => {
@@ -44,19 +48,10 @@ function createPromise(position, delay) {
 function onFulfilled({ position, delay }) {
   Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
 }
-
 function onRejected({ position, delay }) {
   Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
 }
 
-function getFormValues() {
-  return {
-    delay: Number(formRef.delay.value),
-    step: Number(formRef.step.value),
-    amount: Number(formRef.amount.value),
-  };
-}
-
 function resetFormValues() {
-  formRef.reset();
+  form.reset();
 }
