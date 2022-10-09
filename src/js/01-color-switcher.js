@@ -2,6 +2,8 @@ function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
 
+let timerId = null;
+
 function onClickStart(e) {
   timerId = setInterval(() => {
     const newColor = (body.style.backgroundColor = getRandomHexColor());
@@ -17,11 +19,8 @@ function onClickStop(e) {
 }
 
 const startBtn = document.querySelector('button[data-start]');
-console.log(startBtn);
 const stopBtn = document.querySelector('button[data-stop]');
-console.log(stopBtn);
 const body = document.querySelector('body');
-console.log(body);
 
 stopBtn.disabled = true;
 
